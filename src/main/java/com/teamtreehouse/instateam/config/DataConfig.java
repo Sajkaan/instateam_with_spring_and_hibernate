@@ -31,7 +31,7 @@ public class DataConfig {
     }
 
     @Bean
-    private DataSource dataSource() {
+    public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
 
         dataSource.setDriverClassName(env.getProperty("instateam.db.driver"));

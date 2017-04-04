@@ -14,7 +14,7 @@ import java.util.List;
 public class ProjectDaoImpl implements ProjectDao {
 
     @Autowired
-    SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     @Override
     public List<Project> findAll() {

@@ -3,6 +3,7 @@ package com.teamtreehouse.instateam.model;
 import com.teamtreehouse.instateam.web.ProjectStatus;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,10 +20,10 @@ public class Project {
     private String projectDescription;
 
     @ManyToMany
-    private Role rolesNeeded;
+    private List<Role> rolesNeeded = new ArrayList<>();
 
-    @OneToMany(mappedBy = "collaborators")
-    private List<Collaborator> collaborators;
+    @ManyToMany(mappedBy = "collaborators")
+    private List<Collaborator> collaborators = new ArrayList<>();
 
     @Enumerated
     private ProjectStatus projectStatus;
@@ -55,11 +56,11 @@ public class Project {
         this.projectDescription = projectDescription;
     }
 
-    public Role getRolesNeeded() {
+    public List<Role> getRolesNeeded() {
         return rolesNeeded;
     }
 
-    public void setRolesNeeded(Role rolesNeeded) {
+    public void setRolesNeeded(List<Role> rolesNeeded) {
         this.rolesNeeded = rolesNeeded;
     }
 

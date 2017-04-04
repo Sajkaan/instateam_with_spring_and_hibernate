@@ -1,6 +1,7 @@
 package com.teamtreehouse.instateam.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +16,7 @@ public class Role {
     private String roleName;
 
     @OneToMany(mappedBy = "role")
-    private List<Collaborator> collaborators;
+    private List<Collaborator> collaborators = new ArrayList<>();
 
     @ManyToMany(mappedBy = "rolesNeeded")
     private List<Project> projects;
