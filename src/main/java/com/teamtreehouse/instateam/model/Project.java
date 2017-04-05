@@ -22,7 +22,7 @@ public class Project {
     @ManyToMany
     private List<Role> rolesNeeded = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "collaborators")
+    @ManyToMany
     private List<Collaborator> collaborators = new ArrayList<>();
 
     @Enumerated
