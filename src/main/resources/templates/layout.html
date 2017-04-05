@@ -27,11 +27,11 @@
     </div>
 
     <div>
-        <nav th:fragment="nav">
+        <nav>
             <ul>
-                <li th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'selected':''}"><a th:href="@{/}">Projects</a></li>
-                <li th:classappend="${#httpServletRequest.getRequestURI() == '/collaborators' ? 'selected':''}"><a th:href="@{/collaborators}">Collaborators</a></li>
-                <li th:classappend="${#httpServletRequest.getRequestURI() == '/roles' ? 'selected':''}"><a th:href="@{/roles}">Roles</a></li>
+                <li><a th:href="@{/}">Projects</a></li>
+                <li><a href="@{/collaborators}">Collaborators</a></li>
+                <li><a href="@{/roles}">Roles</a></li>
             </ul>
         </nav>
     </div>
