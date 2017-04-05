@@ -37,7 +37,7 @@ public class ProjectController {
     public String newProject(Model model) {
         model.addAttribute("project", new Project());
 
-        return "new_project";
+        return "project/edit_project";
     }
 
 }
