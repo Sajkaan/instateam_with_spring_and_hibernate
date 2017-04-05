@@ -33,4 +33,11 @@ public class ProjectController {
         return "index";
     }
 
+    @RequestMapping("/new_project")
+    public String newProject(Model model) {
+        model.addAttribute("project", new Project());
+
+        return "new_project";
+    }
+
 }
