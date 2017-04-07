@@ -1,7 +1,5 @@
 package com.teamtreehouse.instateam.model;
 
-import com.teamtreehouse.instateam.web.ProjectStatus;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +23,8 @@ public class Project {
     @ManyToMany
     private List<Collaborator> collaborators = new ArrayList<>();
 
-    @Enumerated
-    private ProjectStatus projectStatus;
+
+    private String projectStatus;
 
 
     public Project() {
@@ -72,11 +70,11 @@ public class Project {
         this.collaborators = collaborators;
     }
 
-    public ProjectStatus getProjectStatus() {
+    public String getProjectStatus() {
         return projectStatus;
     }
 
-    public void setProjectStatus(ProjectStatus projectStatus) {
+    public void setProjectStatus(String projectStatus) {
         this.projectStatus = projectStatus;
     }
 }
