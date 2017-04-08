@@ -4,15 +4,14 @@
 <body>
     <div th:replace="layout :: header"></div>
     <div th:replace="layout :: nav"></div>
+
     <section>
-        <div class="container-wrapper">
+        <div class="container wrapper">
             <div class="project-list">
-                <div class="project">
-                    <div th:each="project : *{projects}" class="project">
-                        <h2><a href="link" th:text="${project.projectName}">Project Name</a></h2>
-                        <p th:text="${project.projectDescription}">Project description</p>
-                        <span th:class="'tag' + ${project.projectStatus.styleClass}" th:text="${project.projectStatus.statusDescription}">Project status</span>
-                    </div>
+                <div class="project" th:each="project : *{projects}">
+                    <h2><a href="link" th:text="${project.projectName}">Project Name</a></h2>
+                    <p th:text="${project.projectDescription}">Project description</p>
+                    <span th:class="'tag ' + ${#strings.toLowerCase(project.projectStatus)}  " th:text="${project.projectStatus}">Project status</span>
                 </div>
             </div>
         </div>

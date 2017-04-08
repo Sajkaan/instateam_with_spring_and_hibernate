@@ -23,7 +23,6 @@ public class Project {
     @ManyToMany
     private List<Collaborator> collaborators = new ArrayList<>();
 
-
     private String projectStatus;
 
 
