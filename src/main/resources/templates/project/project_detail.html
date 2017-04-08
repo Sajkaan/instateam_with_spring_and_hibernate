@@ -1,55 +1,22 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>InstaTeam</title>
-        <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="/normalize.css">
-        <link rel="stylesheet" href="/site.css">
-    </head>
-    <body>
-        <header>
-            <div class="container">
-                <div class="site-header">
-                    <a class="logo" href="index.html">InstaTeam</a>
-                    <a class="new-project button icon-left" href="#"><i class="material-icons">add</i> New Project</a>
-                </div>
-            </div>
-        </header>
-        <nav>
-            <ul>
-                <li class="selected"><a href="index.html">Projects</a></li>
-                <li><a href="collaborators.html">Collaborators</a></li>
-                <li><a href="roles.html">Roles</a></li>
-            </ul>
-        </nav>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('projects')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+<div th:replace="layout :: nav"></div>
         <section>
             <div class="container wrapper">
                 <div class="project-list single">
                     <div class="project">
-                        <h2>Website Project</h2>
-                        <p>Design and build a custom website</p>
-                        <span class="tag active">Active</span>
+                        <h2 th:text="${project.projectName}">Website Project</h2>
+                        <p th:text="${project.projectDescription}">Design and build a custom website</p>
+                        <span class="'tag ' + ${#strings.toLowerCase(project.projectStatus)}  " th:text="${project.projectStatus}">Project status</span>
                     </div>
                     <div class="roles-collaborators">
                         <h3>Roles &amp; Collaborators</h3>
-                        <div class="list-item">
-                            <span class="primary">Developer</span>
-                            <span class="secondary">Michael Pemulis</span>
-                        </div>
-                        <div class="list-item">
-                            <span class="primary">Designer</span>
-                            <span class="secondary">Don Gately</span>
-                        </div>
-                        <div class="list-item">
-                            <span class="primary">QA</span>
-                                <span class="secondary">Joelle Van Dyne</span>
-                            </div>
-                        <div class="list-item">
-                            <span class="primary">DevOps</span>
-                            <span class="secondary">[Unassigned]</span>
+                        <div class="list-item" th:each="collaborator : *{collaborators}">
+                            <span class="primary" th:text="${collaborator.role.roleName}">Developer</span>
+                            <span class="secondary" th:text="${collaborator.name}">Michael Pemulis</span>
                         </div>
                     </div>
                     <div class="actions">
