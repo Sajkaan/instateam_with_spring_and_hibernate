@@ -17,7 +17,7 @@ public class Collaborator {
     private String name;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.DETACH})
+    @ManyToOne
     private Role role;
 
     public Collaborator() {

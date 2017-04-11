@@ -15,11 +15,9 @@ public class Role {
 
     private String roleName;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")
     private List<Collaborator> collaborators = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "rolesNeeded")
-    private List<Project> projects;
 
     public Role() {
     }
@@ -48,11 +46,4 @@ public class Role {
         this.collaborators = collaborators;
     }
 
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
 }

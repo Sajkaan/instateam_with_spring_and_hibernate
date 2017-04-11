@@ -1,6 +1,5 @@
 package com.teamtreehouse.instateam.web.controller;
 
-import com.teamtreehouse.instateam.model.Collaborator;
 import com.teamtreehouse.instateam.model.Project;
 import com.teamtreehouse.instateam.service.CollaboratorService;
 import com.teamtreehouse.instateam.service.ProjectService;
@@ -8,9 +7,12 @@ import com.teamtreehouse.instateam.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -37,20 +39,28 @@ public class ProjectController {
 
     @RequestMapping("/new_project")
     public String newProject(Model model) {
-        model.addAttribute("project", new Project());
+        if (!model.containsAttribute("project")) {
+            model.addAttribute("project", new Project());
+        }
+        model.addAttribute("roles", roleService.findAll());
 
         return "project/edit_project";
+    }
+
+    @RequestMapping(value = "/new_project", method = RequestMethod.POST)
+    public String addProject(@Valid Project project, BindingResult result){
+        if (result.hasErrors()) {
+            System.out.println(result.getAllErrors());
+        } else {
+            projectService.save(project);
+        }
+        return "redirect:/";
     }
 
     @RequestMapping("/projects/{id}")
     public String project(@PathVariable Long id, Model model) {
         Project project = projectService.findById(id);
-        List<Collaborator> collaborators = project.getCollaborators();
 
-        System.out.println(collaborators.get(0));
-        System.out.println(collaborators.get(1));
-        model.addAttribute("collaborators", collaborators);
-        model.addAttribute("project", project);
 
 
 

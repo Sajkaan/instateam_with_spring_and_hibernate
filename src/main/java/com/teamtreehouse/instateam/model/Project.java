@@ -17,7 +17,7 @@ public class Project {
 
     private String projectDescription;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     private List<Role> rolesNeeded = new ArrayList<>();
 
     @ManyToMany
