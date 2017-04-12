@@ -39,6 +39,7 @@ public class ProjectController {
 
     @RequestMapping("/new_project")
     public String newProject(Model model) {
+
         if (!model.containsAttribute("project")) {
             model.addAttribute("project", new Project());
         }
@@ -49,6 +50,7 @@ public class ProjectController {
 
     @RequestMapping(value = "/new_project", method = RequestMethod.POST)
     public String addProject(@Valid Project project, BindingResult result){
+
         if (result.hasErrors()) {
             System.out.println(result.getAllErrors());
         } else {
@@ -58,11 +60,10 @@ public class ProjectController {
     }
 
     @RequestMapping("/projects/{id}")
-    public String project(@PathVariable Long id, Model model) {
+    public String projectDetails(@PathVariable Long id, Model model) {
+
         Project project = projectService.findById(id);
-
-
-
+        model.addAttribute("project", project);
 
         return "project/project_detail";
     }

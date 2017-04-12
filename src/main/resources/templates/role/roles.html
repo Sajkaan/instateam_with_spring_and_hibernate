@@ -7,7 +7,7 @@
 
         <section>
             <div class="container wrapper">
-                <form method="post" th:action="@{/roles}">
+                <form method="post" th:action="@{/roles}" th:object="${role}">
                     <h2>Manage Roles</h2>
                     <div>
                         <ul class="checkbox-list" th:each = "role : ${roles}">
@@ -15,8 +15,9 @@
                         </ul>
                     </div>
                     <div class="actions add-new-role">
-                        <input type="text" placeholder="New Role..."/>
-                        <a class="button" th:href="@{/roles}" type="submit">Add</a>
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="text" th:field="*{roleName}" placeholder="New Role..."/>
+                        <button type="submit" class="button">Add</button>
                     </div>
                 </form>
             </div>

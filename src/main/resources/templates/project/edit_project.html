@@ -31,7 +31,7 @@
                         <ul class="checkbox-list" th:each="role : ${roles}">
                             <li>
                                 <input type="checkbox" th:field="*{rolesNeeded}" th:value="${role.id}"/>
-                                <span class="primary" th:text="${role.name}"> Developer</span>
+                                <span class="primary" th:text="${role.roleName}"> Developer</span>
                             </li>
                         </ul>
                     </div>
