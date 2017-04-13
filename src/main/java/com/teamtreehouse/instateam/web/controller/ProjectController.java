@@ -27,6 +27,7 @@ public class ProjectController {
     @Autowired
     private CollaboratorService collaboratorService;
 
+    // Index page
     @RequestMapping("/")
     public String projectList(Model model) {
 
@@ -37,17 +38,21 @@ public class ProjectController {
         return "index";
     }
 
+    // Adding a new project
     @RequestMapping("/new_project")
     public String newProject(Model model) {
 
         if (!model.containsAttribute("project")) {
             model.addAttribute("project", new Project());
         }
+
         model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("action", "/new_project");
 
         return "project/edit_project";
     }
 
+    // Adding a new project post method
     @RequestMapping(value = "/new_project", method = RequestMethod.POST)
     public String addProject(@Valid Project project, BindingResult result){
 
@@ -59,6 +64,7 @@ public class ProjectController {
         return "redirect:/";
     }
 
+    // Detail page for the specific project
     @RequestMapping("/projects/{id}")
     public String projectDetails(@PathVariable Long id, Model model) {
 
@@ -68,4 +74,20 @@ public class ProjectController {
         return "project/project_detail";
     }
 
+    // Edit specific project
+    @RequestMapping("/projects/{id}/edit")
+    public String editProject(@PathVariable Long id, Model model) {
+
+        Project project = projectService.findById(id);
+
+        if (!model.containsAttribute("project")) {
+            model.addAttribute("project", project );
+            System.out.println("Hello from the other side");
+        }
+
+        model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("action", String.format("/projects/%s/edit", id));
+
+        return "project/edit_project";
+    }
 }

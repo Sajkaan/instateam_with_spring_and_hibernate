@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Projects")
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProjectID")
     private Long id;
 
     private String projectName;
@@ -26,8 +24,7 @@ public class Project {
     private String projectStatus;
 
 
-    public Project() {
-    }
+    public Project() {}
 
     public Long getId() {
         return id;
@@ -75,5 +72,33 @@ public class Project {
 
     public void setProjectStatus(String projectStatus) {
         this.projectStatus = projectStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Project project = (Project) o;
+
+        if (id != null ? !id.equals(project.id) : project.id != null) return false;
+        if (projectName != null ? !projectName.equals(project.projectName) : project.projectName != null) return false;
+        if (projectDescription != null ? !projectDescription.equals(project.projectDescription) : project.projectDescription != null)
+            return false;
+        if (rolesNeeded != null ? !rolesNeeded.equals(project.rolesNeeded) : project.rolesNeeded != null) return false;
+        if (collaborators != null ? !collaborators.equals(project.collaborators) : project.collaborators != null)
+            return false;
+        return projectStatus != null ? projectStatus.equals(project.projectStatus) : project.projectStatus == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (projectName != null ? projectName.hashCode() : 0);
+        result = 31 * result + (projectDescription != null ? projectDescription.hashCode() : 0);
+        result = 31 * result + (rolesNeeded != null ? rolesNeeded.hashCode() : 0);
+        result = 31 * result + (collaborators != null ? collaborators.hashCode() : 0);
+        result = 31 * result + (projectStatus != null ? projectStatus.hashCode() : 0);
+        return result;
     }
 }
