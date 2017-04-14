@@ -1,6 +1,8 @@
 package com.teamtreehouse.instateam.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +11,10 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RoleID")
     private Long id;
 
+    @NotNull(message = "Enter the name of the role you want to add")
+    @Size(min = 3, max = 20)
     private String roleName;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")

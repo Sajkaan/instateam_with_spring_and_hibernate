@@ -4,6 +4,7 @@
 <body>
     <div th:replace="layout :: header"></div>
     <div th:replace="layout :: nav"></div>
+    <div th:replace="layout :: flash"></div>
 
     <section>
         <div class="container wrapper">
@@ -11,6 +12,7 @@
                 <div class="project" th:each="project : *{projects}">
                     <h2><a th:href="@{'projects/' + ${project.id}}" th:text="${project.projectName}">Project Name</a></h2>
                     <p th:text="${project.projectDescription}">Project description</p>
+                    <p th:text="${#dates.format(project.dateCreated, 'dd-M-yyyy hh:mm:ss')}"></p>
                     <span th:class="'tag ' + ${#strings.toLowerCase(project.projectStatus)}  " th:text="${project.projectStatus}">Project status</span>
                 </div>
             </div>
