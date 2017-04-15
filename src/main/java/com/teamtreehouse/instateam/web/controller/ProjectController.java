@@ -88,9 +88,9 @@ public class ProjectController {
         if (project.getRolesNeeded() != null) {
             roles.addAll(project.getRolesNeeded()
                     .stream()
-                    .filter(role -> role.getRoleName() != null)
-                    .map(role -> roleService.findById(role.getId()))
+                    .filter(role -> role != null)
                     .collect(Collectors.toList()));
+
             project.setRolesNeeded(roles);
         } else {
             project.setRolesNeeded(new ArrayList<>());
@@ -107,7 +107,9 @@ public class ProjectController {
     public String projectDetails(@PathVariable Long id, Model model) {
 
         Project project = projectService.findById(id);
+
         model.addAttribute("project", project);
+        model.addAttribute("collaborators", project.getCollaborators());
 
         return "project/project_detail";
     }
