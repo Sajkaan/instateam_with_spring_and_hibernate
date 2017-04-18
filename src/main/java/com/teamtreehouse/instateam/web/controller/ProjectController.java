@@ -120,13 +120,12 @@ public class ProjectController {
     @RequestMapping("/projects/{id}/edit")
     public String editProject(@PathVariable Long id, Model model) {
 
-        Project project = projectService.findById(id);
-
-        if (model.containsAttribute("project")) {
+        if (!model.containsAttribute("project")) {
+            Project project = projectService.findById(id);
             model.addAttribute("project", project );
-            System.out.println("Hello from the other side");
+            model.addAttribute("collaborators", project.getCollaborators());
         }
-
+        // TODO: SG Create attribute to make button have edit text and one add in the new project
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("action", String.format("/projects/%s/edit", id));
 
