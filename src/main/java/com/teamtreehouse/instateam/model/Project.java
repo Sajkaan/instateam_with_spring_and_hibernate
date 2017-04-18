@@ -26,10 +26,11 @@ public class Project {
 
     private String projectStatus;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @NotNull
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Role> rolesNeeded = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Collaborator> collaborators = new ArrayList<>();
 
     @DateTimeFormat(pattern = "dd-M-yyyy hh:mm:ss")

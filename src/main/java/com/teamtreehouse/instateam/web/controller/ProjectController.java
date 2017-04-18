@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Controller
@@ -91,8 +90,7 @@ public class ProjectController {
 
         // TODO: Find a way to insert the values into the roles list that where selected in the checkboxes
         if (project.getRolesNeeded() != null) {
-            roles.addAll(project.getRolesNeeded().stream().filter(role -> role.getRoleName() != null).
-
+            roles.addAll(project.getRolesNeeded().stream().filter(role -> role.equals(roleService.findById(role.getId()))).collect(Collectors.toList()));
 
             project.setRolesNeeded(roles);
         } else {
