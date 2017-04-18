@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -69,4 +70,17 @@ public class RoleDaoImpl implements RoleDao {
 
         session.close();
     }
+
+    @Override
+    public List<Role> findByName(String name) {
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createQuery("FROM ROLE WHERE NAME=:NAME");
+
+        query.setParameter("name", name);
+
+        return query.getResultList();
+    }
+
+
 }

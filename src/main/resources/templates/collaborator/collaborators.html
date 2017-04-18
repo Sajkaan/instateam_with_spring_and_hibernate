@@ -8,15 +8,15 @@
             <div class="container wrapper">
                 <form action="">
                     <h2 style="display:inline">Manage Collaborators</h2>
-                    <h2 th:if="${project != null}" style="display:inline"
-                        th:text="| for ${project.name}|"></h2>
+<!--                    <h2 th:if="${project != null}" style="display:inline"
+                        th:text="| for ${project.name}|"></h2>-->
                     <ul class="checkbox-list roles-collaborators">
                         <li th:each="colab: ${collaborators}">
                             <span class="primary" th:text="${colab.name}">Michael Pemulius</span>
                         </li>
                     </ul>
                 </form>
-                <form action="${action}" th:object="${collaborator}" method="post">
+                <form th:action="${action}" th:object="${collaborator}" method="post">
                     <div class="actions add-new-collaborator">
                         <input type="text" th:field="*{name}" placeholder="Name"/>
                         <input type="hidden" th:field="*{id}"/>
@@ -29,7 +29,7 @@
                                 </option>
                             </select>
                         </div>
-                        <input type="submit" class="button" value="Add Collaborator"/>
+                        <button type="submit" class="button">Add</button>
                     </div>
                 </form>
             </div>

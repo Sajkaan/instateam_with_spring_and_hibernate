@@ -42,8 +42,8 @@ public class RoleController {
 
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
     public String addRole(@Valid Role role, BindingResult result) {
-            roleService.save(role);
 
+        roleService.save(role);
 
         return "redirect:/roles";
     }

@@ -1,5 +1,6 @@
 package com.teamtreehouse.instateam.web.controller;
 
+import com.teamtreehouse.instateam.model.Collaborator;
 import com.teamtreehouse.instateam.model.Project;
 import com.teamtreehouse.instateam.model.Role;
 import com.teamtreehouse.instateam.service.CollaboratorService;
@@ -19,6 +20,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Controller
@@ -78,6 +80,8 @@ public class ProjectController {
     public String saveProject(@Valid Project project, BindingResult result, RedirectAttributes redirectAttributes){
 
         if (result.hasErrors()) {
+            System.out.println("============================================================");
+            System.out.println(result.getAllErrors().toString());
             redirectAttributes.addFlashAttribute("project", project);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
             return "redirect:/new_project";
@@ -85,11 +89,10 @@ public class ProjectController {
 
         List<Role> roles = new ArrayList<>();
 
+        // TODO: Find a way to insert the values into the roles list that where selected in the checkboxes
         if (project.getRolesNeeded() != null) {
-            roles.addAll(project.getRolesNeeded()
-                    .stream()
-                    .filter(role -> role != null)
-                    .collect(Collectors.toList()));
+            roles.addAll(project.getRolesNeeded().stream().filter(role -> role.getRoleName() != null).
+
 
             project.setRolesNeeded(roles);
         } else {
@@ -107,9 +110,10 @@ public class ProjectController {
     public String projectDetails(@PathVariable Long id, Model model) {
 
         Project project = projectService.findById(id);
+        List<Collaborator> collaboratorList = project.getCollaborators();
 
         model.addAttribute("project", project);
-        model.addAttribute("collaborators", project.getCollaborators());
+        model.addAttribute("collaborators", collaboratorList);
 
         return "project/project_detail";
     }

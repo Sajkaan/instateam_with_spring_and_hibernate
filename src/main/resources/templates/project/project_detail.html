@@ -14,8 +14,9 @@
                     </div>
                     <div class="roles-collaborators">
                         <h3>Roles &amp; Collaborators</h3>
-                        <div class="list-item" th:each="collaborator : ${collaborators}" >
-                            <span class="primary" th:if="${collaborator.role != null}"
+                        <div class="list-item">
+                            <span class="primary"
+                                  th:each="collaborator : ${collaborators}"
                                   th:text="${collaborator.role.roleName}">Developer</span>
                             <span class="secondary" th:text="${collaborator.name}">Michael Pemulis</span>
                         </div>

@@ -1,40 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-<head th:replace="layout :: head('edit collaborators')"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('roles')"></head>
 <body>
 <div th:replace="layout :: header"></div>
 <div th:replace="layout :: nav"></div>
+
         <section>
             <div class="container wrapper">
-                <form th:action="@${action}" method="post" th:object="${project}">
+                <form method="post" th:object="${collaborators}"
+                      th:action="" >
                     <label>Edit Collaborators: Website Project</label>
                     <ul class="checkbox-list">
-                        <li><span class="primary">Developer</span>
+                        <li><span class="primary" th:text="">Developer</span>
                             <div class="custom-select">
                                 <span class="dropdown-arrow"></span>
-                                <select>
-                                    <option value="#">Michael Pemulis</option>
-                                    <option value="#">Name</option>
+                                <select th:each="colab : ${collaborators}">
+                                    <option th:value="${colab.name}">Michael Pemulis</option>
                                 </select>
                             </div>
                         </li>
-                        <li><span class="primary">Designer</span>
-                            <div class="custom-select">
-                                <span class="dropdown-arrow"></span>
-                                <select>
-                                    <option value="#">Don Gately</option>
-                                    <option value="#">Name</option>
-                                </select>
-                            </div>
-                        </li>
-                        <li><span class="primary">QA</span>
-                            <div class="custom-select">
-                                <span class="dropdown-arrow"></span>
-                                <select>
-                                    <option value="#">Joelle Van Dyne</option>
-                                    <option value="#">Name</option>
-                                </select>
-                            </div>
+
                         </li>
                         <li><span class="primary">DevOps</span>
                             <div class="custom-select">
@@ -48,7 +33,7 @@
                     </ul>
                     <div class="actions">
                         <input type="submit" value="Save" class="button">
-                        <a href="#" class="button button-secondary">Cancel</a>
+                        <a th:href="@{|/projects/${project.id}|}" class="button button-secondary">Cancel</a>
                     </div>
                 </form>
             </div>
