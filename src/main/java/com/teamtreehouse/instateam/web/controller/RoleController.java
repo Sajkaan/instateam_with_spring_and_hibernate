@@ -42,7 +42,10 @@ public class RoleController {
 
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
     public String addRole(@Valid Role role, BindingResult result) {
-
+        if (result.hasErrors()) {
+            // TODO : SG Add flash message
+            return "redirect:/roles";
+        }
         roleService.save(role);
 
         return "redirect:/roles";

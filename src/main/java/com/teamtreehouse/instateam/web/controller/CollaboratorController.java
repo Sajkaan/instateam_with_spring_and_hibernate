@@ -35,6 +35,7 @@ public class CollaboratorController {
         model.addAttribute("collaborators", collaboratorService.findAll());
         model.addAttribute("project", null);
         model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("role", new Role());
         model.addAttribute("action", "/collaborators");
         model.addAttribute("collaborator", new Collaborator());
 
@@ -58,13 +59,16 @@ public class CollaboratorController {
     }
 
     @RequestMapping(value = "/collaborators",  method = RequestMethod.POST)
-    public String addCollaborator(Model model, @PathVariable Long id,
-                                  @Valid Collaborator collaborator, BindingResult result) {
-        Project project = projectService.findById(id);
+    public String addCollaborator(@Valid Collaborator collaborator, BindingResult result) {
+
+        if (result.hasErrors()) {
+
+            // TODO : SG ADD FLASH MESSAGE
+            return "redirect:/collaborators";
+        }
         Role role = roleService.findById(collaborator.getRole().getId());
         collaborator.setRole(role);
         collaboratorService.save(collaborator);
-        projectService.save(project);
 
         return "redirect:/collaborators";
     }

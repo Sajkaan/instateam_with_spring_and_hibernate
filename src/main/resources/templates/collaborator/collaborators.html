@@ -6,26 +6,22 @@
 <div th:replace="layout :: nav"></div>
         <section>
             <div class="container wrapper">
-                <form action="">
+
+                <form th:action="${action}" th:object="${collaborator}" method="post">
                     <h2 style="display:inline">Manage Collaborators</h2>
-<!--                    <h2 th:if="${project != null}" style="display:inline"
-                        th:text="| for ${project.name}|"></h2>-->
                     <ul class="checkbox-list roles-collaborators">
                         <li th:each="colab: ${collaborators}">
                             <span class="primary" th:text="${colab.name}">Michael Pemulius</span>
                         </li>
                     </ul>
-                </form>
-                <form th:action="${action}" th:object="${collaborator}" method="post">
                     <div class="actions add-new-collaborator">
                         <input type="text" th:field="*{name}" placeholder="Name"/>
                         <input type="hidden" th:field="*{id}"/>
                         <div class="custom-select">
                             <span class="dropdown-arrow"></span>
-                            <select th:field="*{role}">
-                                <option th:each="role : ${roles}" th:value="${role.roleName}"
+                            <select th:field="*{role.id}">
+                                <option th:each="role : ${roles}" th:value="${role.id}"
                                         th:text="${role.roleName}">
-                                    <input type="hidden" th:field="*{role.id}" th:value="${role.id}"/>
                                 </option>
                             </select>
                         </div>
