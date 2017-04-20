@@ -49,26 +49,14 @@ public class ProjectController {
     @RequestMapping("/new_project")
     public String newProject(Model model, RedirectAttributes redirectAttributes) {
 
-/*        if (roleService.findAll().isEmpty()) {
-            redirectAttributes.addAttribute("flash", new FlashMessage(
-                    "Project must have at least one role.Please create a role.",
-                    FlashMessage.Status.FAILURE));
-            return "redirect:/roles";
-        }*/
-
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("action", "/new_project");
 
         if (!model.containsAttribute("project")) {
             Project project = new Project();
-            project.setRolesNeeded(new ArrayList<>());
             model.addAttribute("project", project);
         } else {
-            Project project = ((Project) model.asMap().get("project"));
-            if (project.getRolesNeeded() == null) {
-                project.setRolesNeeded(new ArrayList<>());
-                model.addAttribute("project", project);
-            }
+            return "redirect:/";
         }
 
         return "project/edit_project";
@@ -79,8 +67,6 @@ public class ProjectController {
     public String saveProject(@Valid Project project, BindingResult result, RedirectAttributes redirectAttributes){
 
         if (result.hasErrors()) {
-            System.out.println("============================================================");
-            System.out.println(result.getAllErrors().toString());
             redirectAttributes.addFlashAttribute("project", project);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
             return "redirect:/new_project";
@@ -91,7 +77,6 @@ public class ProjectController {
         // TODO: Find a way to insert the values into the roles list that where selected in the checkboxes
         if (project.getRolesNeeded() != null) {
             roles.addAll(project.getRolesNeeded().stream().filter(role -> role.equals(roleService.findById(role.getId()))).collect(Collectors.toList()));
-
             project.setRolesNeeded(roles);
         } else {
             project.setRolesNeeded(new ArrayList<>());
