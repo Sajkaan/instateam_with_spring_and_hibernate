@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -20,7 +21,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProjectController {
@@ -49,38 +49,39 @@ public class ProjectController {
     @RequestMapping("/new_project")
     public String newProject(Model model, RedirectAttributes redirectAttributes) {
 
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("action", "/new_project");
-
         if (!model.containsAttribute("project")) {
             Project project = new Project();
             model.addAttribute("project", project);
-        } else {
-            return "redirect:/";
-        }
+            model.addAttribute("roles", roleService.findAll());
+            model.addAttribute("action", "/new_project");
+            Long[] rolesID = new Long[roleService.findAll().toArray().length];
+            model.addAttribute("rolesID[]", rolesID);
 
-        return "project/edit_project";
+            return "project/edit_project";
+        } else {
+            return "redirect:/edit_project";
+        }
     }
 
     // Adding a new project post method
     @RequestMapping(value = "/new_project", method = RequestMethod.POST)
-    public String saveProject(@Valid Project project, BindingResult result, RedirectAttributes redirectAttributes){
+    public String saveProject(@Valid Project project,
+                              @RequestParam(value = "rolesID[]") Long[] rolesID,
+                              BindingResult result, RedirectAttributes redirectAttributes){
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("project", project);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
-            return "redirect:/new_project";
+            return "redirect:/";
         }
-
         List<Role> roles = new ArrayList<>();
 
-        // TODO: Find a way to insert the values into the roles list that where selected in the checkboxes
-        if (project.getRolesNeeded() != null) {
-            roles.addAll(project.getRolesNeeded().stream().filter(role -> role.equals(roleService.findById(role.getId()))).collect(Collectors.toList()));
-            project.setRolesNeeded(roles);
-        } else {
-            project.setRolesNeeded(new ArrayList<>());
+        if (rolesID != null) {
+            for (Long id : rolesID) {
+                roles.add(roleService.findById(id));
+            }
         }
+        project.setRolesNeeded(roles);
 
         project.setDateCreated(Date.from(Instant.now()));
         projectService.save(project);
@@ -94,9 +95,10 @@ public class ProjectController {
 
         Project project = projectService.findById(id);
         List<Collaborator> collaboratorList = project.getCollaborators();
-
+        List<Role> roles = project.getRolesNeeded();
         model.addAttribute("project", project);
         model.addAttribute("collaborators", collaboratorList);
+        model.addAttribute("roles", roles);
 
         return "project/project_detail";
     }
