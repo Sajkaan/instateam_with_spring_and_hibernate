@@ -32,8 +32,4 @@ public class RoleServiceImpl implements RoleService {
         roleDao.delete(role);
     }
 
-    @Override
-    public List<Role> findByName(String name) {
-        return roleDao.findByName(name);
-    }
 }

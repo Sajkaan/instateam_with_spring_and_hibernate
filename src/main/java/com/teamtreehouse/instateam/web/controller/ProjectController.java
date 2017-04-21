@@ -98,13 +98,12 @@ public class ProjectController {
         List<Role> roles = project.getRolesNeeded();
         model.addAttribute("project", project);
         model.addAttribute("collaborators", collaboratorList);
-        model.addAttribute("roles", roles);
 
         return "project/project_detail";
     }
 
     // Edit specific project
-    @RequestMapping("/projects/{id}/edit")
+    @RequestMapping("/projects/{id}/editProject")
     public String editProject(@PathVariable Long id, Model model) {
 
         if (!model.containsAttribute("project")) {
