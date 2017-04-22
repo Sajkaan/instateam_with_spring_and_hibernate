@@ -117,4 +117,19 @@ public class ProjectController {
 
         return "project/edit_project";
     }
+
+    @RequestMapping("projects/{id}/editCollaborators")
+    public String editCollaborators(Model model,@PathVariable Long id) {
+
+        Project project = projectService.findById(id);
+        List<Collaborator> collaborators = collaboratorService.findAll();
+        List<Role> rolesNeeded = project.getRolesNeeded();
+
+        model.addAttribute("project", project);
+        model.addAttribute("collaborators", collaborators);
+        model.addAttribute("rolesNeeded",rolesNeeded);
+
+
+        return "project/project_collaborators";
+    }
 }
