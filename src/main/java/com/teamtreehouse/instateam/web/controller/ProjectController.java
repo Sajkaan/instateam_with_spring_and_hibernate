@@ -132,8 +132,8 @@ public class ProjectController {
         }
 
         model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("action", String.format("/projects/%s/edit", id));
-        model.addAttribute("button", "Edit");
+        model.addAttribute("action", String.format("/projects/%s/editProject", id));
+        model.addAttribute("button", "Update");
         model.addAttribute("cancel", String.format("/projects/%s", id));
 
         return "project/edit_project";
@@ -141,11 +141,16 @@ public class ProjectController {
 
     // Edit specific project POST method
     @RequestMapping(value = "/project/{id}/editProject", method = RequestMethod.POST)
-    public String editProjectPost(@PathVariable Long id ){
+    public String editProjectPost(@Valid Project project,
+                                  @PathVariable Long id, BindingResult result ){
 
+        if (result.hasErrors()) {
+            return String.format("redirect:/projects/%s", id);
+        }
 
+        projectService.save(project);
 
-        return "redirect:/project/{id}";
+        return "redirect:/projects/{id}";
     }
 
 
