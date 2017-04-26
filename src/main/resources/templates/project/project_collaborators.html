@@ -9,14 +9,13 @@
             <div class="container wrapper">
                 <form method="post" >
                     <label>Edit Collaborators: Website Project</label>
-                    <ul class="checkbox-list" th:each="colab : ${collaborators}">
-                        <li>
-                            <span class="primary">Developer</span>
-                            <div class="custom-select">
+                    <ul class="checkbox-list">
+                        <li th:each="role : ${rolesNeeded}">
+                            <span class="primary"  th:text="${role.roleName}">Developer</span>
+                            <div class="custom-select" th:each="colab : ${collaborators}">
                                 <span class="dropdown-arrow"></span>
                                 <select>
                                     <option th:text="${colab.name}" value="#">Michael Pemulis</option>
-                                    <option value="#">Name</option>
                                 </select>
                             </div>
                         </li>

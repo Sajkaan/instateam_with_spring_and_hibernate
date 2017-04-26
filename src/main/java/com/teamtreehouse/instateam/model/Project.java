@@ -26,7 +26,6 @@ public class Project {
 
     private String projectStatus;
 
-    @NotNull
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Role> rolesNeeded = new ArrayList<>();
 
