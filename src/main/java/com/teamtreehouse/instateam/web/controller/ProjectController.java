@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -20,7 +21,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProjectController {
@@ -47,55 +47,42 @@ public class ProjectController {
 
     // Adding a new project
     @RequestMapping("/new_project")
-    public String newProject(Model model, RedirectAttributes redirectAttributes) {
-
-/*        if (roleService.findAll().isEmpty()) {
-            redirectAttributes.addAttribute("flash", new FlashMessage(
-                    "Project must have at least one role.Please create a role.",
-                    FlashMessage.Status.FAILURE));
-            return "redirect:/roles";
-        }*/
-
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("action", "/new_project");
+    public String newProject(Model model) {
 
         if (!model.containsAttribute("project")) {
             Project project = new Project();
-            project.setRolesNeeded(new ArrayList<>());
             model.addAttribute("project", project);
-        } else {
-            Project project = ((Project) model.asMap().get("project"));
-            if (project.getRolesNeeded() == null) {
-                project.setRolesNeeded(new ArrayList<>());
-                model.addAttribute("project", project);
-            }
-        }
+            model.addAttribute("roles", roleService.findAll());
+            model.addAttribute("action", "/new_project");
+            Long[] rolesID = new Long[roleService.findAll().toArray().length];
+            model.addAttribute("rolesID[]", rolesID);
+            model.addAttribute("button", "Save");
 
-        return "project/edit_project";
+            return "project/edit_project";
+        } else {
+            return "redirect:/edit_project";
+        }
     }
 
     // Adding a new project post method
     @RequestMapping(value = "/new_project", method = RequestMethod.POST)
-    public String saveProject(@Valid Project project, BindingResult result, RedirectAttributes redirectAttributes){
+    public String saveProject(@Valid Project project,
+                              @RequestParam(value = "rolesID[]") Long[] rolesID,
+                              BindingResult result, RedirectAttributes redirectAttributes){
 
         if (result.hasErrors()) {
-            System.out.println("============================================================");
-            System.out.println(result.getAllErrors().toString());
-            redirectAttributes.addFlashAttribute("project", project);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
+            redirectAttributes.addFlashAttribute("project", project);
             return "redirect:/new_project";
         }
-
         List<Role> roles = new ArrayList<>();
 
-        // TODO: Find a way to insert the values into the roles list that where selected in the checkboxes
-        if (project.getRolesNeeded() != null) {
-            roles.addAll(project.getRolesNeeded().stream().filter(role -> role.equals(roleService.findById(role.getId()))).collect(Collectors.toList()));
-
-            project.setRolesNeeded(roles);
-        } else {
-            project.setRolesNeeded(new ArrayList<>());
+        if (rolesID != null) {
+            for (Long id : rolesID) {
+                roles.add(roleService.findById(id));
+            }
         }
+        project.setRolesNeeded(roles);
 
         project.setDateCreated(Date.from(Instant.now()));
         projectService.save(project);
@@ -109,7 +96,7 @@ public class ProjectController {
 
         Project project = projectService.findById(id);
         List<Collaborator> collaboratorList = project.getCollaborators();
-
+        List<Role> roles = project.getRolesNeeded();
         model.addAttribute("project", project);
         model.addAttribute("collaborators", collaboratorList);
 
@@ -117,18 +104,64 @@ public class ProjectController {
     }
 
     // Edit specific project
-    @RequestMapping("/projects/{id}/edit")
+    @RequestMapping("/projects/{id}/editProject")
     public String editProject(@PathVariable Long id, Model model) {
 
         if (!model.containsAttribute("project")) {
             Project project = projectService.findById(id);
+            List<Role> rolesNeeded = project.getRolesNeeded();
             model.addAttribute("project", project );
             model.addAttribute("collaborators", project.getCollaborators());
+            model.addAttribute("rolesNeeded", rolesNeeded);
+
+            List<Boolean> isChecked = new ArrayList<>();
+
+            for (Role r : roleService.findAll()) {
+
+                for (Role r2 : rolesNeeded) {
+                    if (r.getRoleName().equals(r2.getRoleName())) {
+                        isChecked.add(true);
+                    } else {
+                        isChecked.add(false);
+                    }
+                }
+
+            }
+            model.addAttribute("isChecked",isChecked);
         }
-        // TODO: SG Create attribute to make button have edit text and one add in the new project
+
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("action", String.format("/projects/%s/edit", id));
+        model.addAttribute("button", "Edit");
 
         return "project/edit_project";
     }
+
+    // Edit specific project POST method
+    @RequestMapping(value = "/project/{id}/editProject", method = RequestMethod.POST)
+    public String editProjectPost(@PathVariable Long id ){
+
+
+
+        return "redirect:/project/{id}";
+    }
+
+
+
+
+
+    @RequestMapping("projects/{id}/editCollaborators")
+    public String editCollaborators(Model model,@PathVariable Long id) {
+
+        Project project = projectService.findById(id);
+        List<Collaborator> collaborators = collaboratorService.findAll();
+
+        model.addAttribute("project", project);
+        model.addAttribute("collaborators", collaborators);
+        model.addAttribute("rolesNeeded", project.getRolesNeeded());
+
+
+        return "project/project_collaborators";
+    }
+
 }
