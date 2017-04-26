@@ -7,14 +7,14 @@
 
         <section>
             <div class="container wrapper">
-                <form method="post" >
+                <form method="post" th:action="${action}" th:object="${project}" >
                     <label>Edit Collaborators: Website Project</label>
                     <ul class="checkbox-list">
                         <li th:each="role : ${rolesNeeded}">
                             <span class="primary"  th:text="${role.roleName}">Developer</span>
                             <div class="custom-select" >
                                 <span class="dropdown-arrow"></span>
-                                <select >
+                                <select th:field="*{collaborators}">
                                     <option th:each="collab : ${collaborators}"
                                             th:text="${collab.name}"
                                             th:value="${collab.id}">Michael Pemulis</option>
@@ -24,7 +24,7 @@
                     </ul>
                     <div class="actions">
                         <input type="submit" value="Save" class="button"/>
-                        <a th:href="@{projects/'${project.id}'}" class="button button-secondary">Cancel</a>
+                        <a th:href="${cancel}" class="button button-secondary">Cancel</a>
                     </div>
                 </form>
             </div>

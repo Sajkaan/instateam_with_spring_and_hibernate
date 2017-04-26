@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -133,6 +134,7 @@ public class ProjectController {
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("action", String.format("/projects/%s/edit", id));
         model.addAttribute("button", "Edit");
+        model.addAttribute("cancel", String.format("/projects/%s", id));
 
         return "project/edit_project";
     }
@@ -159,7 +161,7 @@ public class ProjectController {
         model.addAttribute("project", project);
         model.addAttribute("collaborators", collaborators);
         model.addAttribute("rolesNeeded", project.getRolesNeeded());
-
+        model.addAttribute("cancel", String.format("/projects/%s", id));
 
         return "project/project_collaborators";
     }
