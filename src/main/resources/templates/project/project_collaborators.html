@@ -12,10 +12,12 @@
                     <ul class="checkbox-list">
                         <li th:each="role : ${rolesNeeded}">
                             <span class="primary"  th:text="${role.roleName}">Developer</span>
-                            <div class="custom-select" th:each="colab : ${collaborators}">
+                            <div class="custom-select" >
                                 <span class="dropdown-arrow"></span>
-                                <select>
-                                    <option th:text="${colab.name}" value="#">Michael Pemulis</option>
+                                <select >
+                                    <option th:each="collab : ${collaborators}"
+                                            th:text="${collab.name}"
+                                            th:value="${collab.id}">Michael Pemulis</option>
                                 </select>
                             </div>
                         </li>
