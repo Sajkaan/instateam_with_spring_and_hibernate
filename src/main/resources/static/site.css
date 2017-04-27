@@ -190,6 +190,10 @@ strong {
 .tag.archived {
 	background: #bbbab9;
 }
+
+.tag.not_started {
+	background: #b20f0c;
+}
 .list-item {
 	border-top: 1px solid #e1e0e0;
 	padding: 18px 35px;

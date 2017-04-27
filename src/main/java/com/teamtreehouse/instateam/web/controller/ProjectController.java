@@ -6,6 +6,7 @@ import com.teamtreehouse.instateam.model.Role;
 import com.teamtreehouse.instateam.service.CollaboratorService;
 import com.teamtreehouse.instateam.service.ProjectService;
 import com.teamtreehouse.instateam.service.RoleService;
+import groovy.util.IFileNameFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,18 +52,17 @@ public class ProjectController {
     public String newProject(Model model) {
 
         if (!model.containsAttribute("project")) {
-            Project project = new Project();
-            model.addAttribute("project", project);
-            model.addAttribute("roles", roleService.findAll());
-            model.addAttribute("action", "/new_project");
-            Long[] rolesID = new Long[roleService.findAll().toArray().length];
-            model.addAttribute("rolesID[]", rolesID);
-            model.addAttribute("button", "Save");
-
-            return "project/edit_project";
-        } else {
-            return "redirect:/edit_project";
+            model.addAttribute("project", new Project());
         }
+
+        model.addAttribute("roles", roleService.findAll());
+        Long[] rolesID = new Long[roleService.findAll().toArray().length];
+        model.addAttribute("rolesID[]", rolesID);
+        model.addAttribute("button", "Save");
+        model.addAttribute("action", "/new_project");
+        model.addAttribute("cancel", "/");
+
+        return "project/edit_project";
     }
 
     // Adding a new project post method
@@ -115,20 +115,6 @@ public class ProjectController {
             model.addAttribute("collaborators", project.getCollaborators());
             model.addAttribute("rolesNeeded", rolesNeeded);
 
-            List<Boolean> isChecked = new ArrayList<>();
-
-            for (Role r : roleService.findAll()) {
-
-                for (Role r2 : rolesNeeded) {
-                    if (r.getRoleName().equals(r2.getRoleName())) {
-                        isChecked.add(true);
-                    } else {
-                        isChecked.add(false);
-                    }
-                }
-
-            }
-            model.addAttribute("isChecked",isChecked);
         }
 
         model.addAttribute("roles", roleService.findAll());
@@ -153,11 +139,7 @@ public class ProjectController {
         return "redirect:/projects/{id}";
     }
 
-
-
-
-
-    @RequestMapping("projects/{id}/editCollaborators")
+    @RequestMapping("/projects/{id}/editCollaborators")
     public String editCollaborators(Model model,@PathVariable Long id) {
 
         Project project = projectService.findById(id);
@@ -165,10 +147,23 @@ public class ProjectController {
 
         model.addAttribute("project", project);
         model.addAttribute("collaborators", collaborators);
-        model.addAttribute("rolesNeeded", project.getRolesNeeded());
         model.addAttribute("cancel", String.format("/projects/%s", id));
 
         return "project/project_collaborators";
     }
+
+    @RequestMapping(value = "/projects/{id}/editCollaborators", method = RequestMethod.POST)
+    public String assignCollaborators(@PathVariable Long id,Project project,
+                                        BindingResult result) {
+
+        Project projectForSaving = projectService.findById(id);
+
+        projectForSaving.setCollaborators(project.getCollaborators());
+
+        projectService.save(projectForSaving);
+
+        return String.format("redirect:/projects/{id}", project.getId());
+    }
+
 
 }

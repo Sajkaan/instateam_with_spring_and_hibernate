@@ -10,7 +10,7 @@
                 <form method="post" th:action="${action}" th:object="${project}" >
                     <label>Edit Collaborators: Website Project</label>
                     <ul class="checkbox-list">
-                        <li th:each="role : ${rolesNeeded}">
+                        <li th:each="role : ${project.rolesNeeded}">
                             <span class="primary"  th:text="${role.roleName}">Developer</span>
                             <div class="custom-select" >
                                 <span class="dropdown-arrow"></span>
