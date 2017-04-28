@@ -99,16 +99,11 @@ public class ProjectController {
     public String editProject(@PathVariable Long id, Model model) {
 
         if (!model.containsAttribute("project")) {
-            Project project = projectService.findById(id);
-            List<Role> rolesNeeded = project.getRolesNeeded();
-            model.addAttribute("project", project );
-            model.addAttribute("collaborators", project.getCollaborators());
-            model.addAttribute("rolesNeeded", rolesNeeded);
-
+            model.addAttribute("project", projectService.findById(id) );
         }
 
         model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("action", String.format("/projects/%s/editProject", id));
+        model.addAttribute("action", String.format("/projects/%s", id));
         model.addAttribute("button", "Update");
         model.addAttribute("cancel", String.format("/projects/%s", id));
 
@@ -116,13 +111,14 @@ public class ProjectController {
     }
 
     // Edit specific project POST method
-    @RequestMapping(value = "/project/{id}/editProject", method = RequestMethod.POST)
+    @RequestMapping(value = "/projects/{id}", method = RequestMethod.POST)
     public String editProjectPost(@Valid Project project,
                                   @PathVariable Long id, BindingResult result ){
 
         if (result.hasErrors()) {
             return String.format("redirect:/projects/%s", id);
         }
+        project.setDateCreated(project.getDateCreated());
 
         projectService.save(project);
 
@@ -154,6 +150,5 @@ public class ProjectController {
 
         return String.format("redirect:/projects/{id}", project.getId());
     }
-
 
 }

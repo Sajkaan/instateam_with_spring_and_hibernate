@@ -6,19 +6,19 @@
 <div th:replace="layout :: nav"></div>
         <section>
             <div class="container wrapper">
-                <form th:action="@{${action}}" method="post" th:object="${project}">
+                <form th:action="${action}" method="post" th:object="${project}">
                     <div>
-                        <label for="project_name"> Project Name:</label>
+                        <label> Project Name:</label>
                         <input type="text" th:field="*{projectName}"/>
                         <div class="error-message" th:if="${#fields.hasErrors ('projectName')}" th:errors="*{projectName}"></div>
                     </div>
                     <div>
-                        <label for="project_description">Project Description:</label>
+                        <label>Project Description:</label>
                         <textarea rows="4" th:field="*{projectDescription}" name="project_description"></textarea>
                         <div class="error-message" th:if="${#fields.hasErrors ('projectDescription')}" th:errors="*{projectDescription}"></div>
                     </div>
                     <div>
-                        <label for="project_status">Project Status:</label>
+                        <label>Project Status:</label>
                         <div class="custom-select">
                         <span class="dropdown-arrow"></span>
                             <select th:field="*{projectStatus}" name="project_status">
@@ -29,10 +29,12 @@
                         </div>
                     </div>
                     <div>
-                        <label for="project_roles">Project Roles:</label>
-                        <ul class="checkbox-list">
-                            <li th:each="role : ${roles}">
-                                <input type="checkbox"  th:filed="*{roleNeeded}" th:value="${role.id}"/>
+                        <label>Project Roles:</label>
+                        <ul class="checkbox-list" th:each="role : ${roles}">
+                            <li >
+                                <input type="checkbox"
+                                       th:filed="*{rolesNeeded}"
+                                       th:value="${role.id}"/>
                                 <span class="primary" th:text="${role.roleName}"> Developer</span>
                             </li>
                         </ul>
