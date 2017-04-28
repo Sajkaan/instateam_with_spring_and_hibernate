@@ -54,10 +54,7 @@ public class ProjectController {
         if (!model.containsAttribute("project")) {
             model.addAttribute("project", new Project());
         }
-
         model.addAttribute("roles", roleService.findAll());
-        Long[] rolesID = new Long[roleService.findAll().toArray().length];
-        model.addAttribute("rolesID[]", rolesID);
         model.addAttribute("button", "Save");
         model.addAttribute("action", "/new_project");
         model.addAttribute("cancel", "/");
@@ -68,7 +65,6 @@ public class ProjectController {
     // Adding a new project post method
     @RequestMapping(value = "/new_project", method = RequestMethod.POST)
     public String saveProject(@Valid Project project,
-                              @RequestParam(value = "rolesID[]") Long[] rolesID,
                               BindingResult result, RedirectAttributes redirectAttributes){
 
         if (result.hasErrors()) {
@@ -76,14 +72,8 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("project", project);
             return "redirect:/new_project";
         }
-        List<Role> roles = new ArrayList<>();
 
-        if (rolesID != null) {
-            for (Long id : rolesID) {
-                roles.add(roleService.findById(id));
-            }
-        }
-        project.setRolesNeeded(roles);
+        project.setRolesNeeded(project.getRolesNeeded());
 
         project.setDateCreated(Date.from(Instant.now()));
         projectService.save(project);
