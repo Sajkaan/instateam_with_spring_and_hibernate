@@ -11,7 +11,11 @@
                     <h2>Manage Roles</h2>
                     <div>
                         <ul class="checkbox-list" th:each = "role : ${roles}">
-                            <li><span class="primary" th:text="${role.roleName}">Developer</span></li>
+                            <li class="primary">
+                                <a th:href="@{'/roles/' + ${role.id} + '/edit'}" th:text="${role.roleName}">
+                                        Developer
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <div class="actions add-new-role">

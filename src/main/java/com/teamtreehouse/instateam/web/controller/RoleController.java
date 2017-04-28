@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -50,5 +51,27 @@ public class RoleController {
 
         return "redirect:/roles";
     }
+
+    @RequestMapping("/roles/{id}/edit")
+    public String editRole(@PathVariable Long id, Model model){
+
+        model.addAttribute("role",roleService.findById(id));
+        model.addAttribute("action", String.format("/roles/%s/edit", id));
+        return "role/detail";
+    }
+
+    @RequestMapping(value = "/roles/{id}/edit", method = RequestMethod.POST)
+    public String changeRole(@Valid Role role, BindingResult result) {
+        if (result.hasErrors()){
+            return "redirect:/roles";
+        }
+
+        roleService.save(role);
+
+        return "redirect:/roles";
+    }
+
+
+
 
 }
