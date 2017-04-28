@@ -73,8 +73,6 @@ public class ProjectController {
             return "redirect:/new_project";
         }
 
-        project.setRolesNeeded(project.getRolesNeeded());
-
         project.setDateCreated(Date.from(Instant.now()));
         projectService.save(project);
 
@@ -118,7 +116,6 @@ public class ProjectController {
         if (result.hasErrors()) {
             return String.format("redirect:/projects/%s", id);
         }
-        project.setDateCreated(project.getDateCreated());
 
         projectService.save(project);
 
