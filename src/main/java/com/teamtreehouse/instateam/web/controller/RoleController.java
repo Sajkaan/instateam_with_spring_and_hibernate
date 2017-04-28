@@ -57,6 +57,7 @@ public class RoleController {
 
         model.addAttribute("role",roleService.findById(id));
         model.addAttribute("action", String.format("/roles/%s/edit", id));
+        model.addAttribute("delete", String.format("/roles/%s/delete", id));
         return "role/detail";
     }
 
@@ -71,7 +72,15 @@ public class RoleController {
         return "redirect:/roles";
     }
 
+    @RequestMapping(value = "/roles/{id}/delete")
+    public String deleteRole(@PathVariable Long id) {
+        Role role = roleService.findById(id);
 
+        // TODO: SG Must set collaborators with specific role to null or delete them too
 
+        roleService.delete(role);
+
+        return "redirect:/roles";
+    }
 
 }

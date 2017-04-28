@@ -419,6 +419,9 @@ form .add-new-collaborator .button {
     padding-top: 20px;
 }
 
-
+.button.delete{
+    background:#e60000;
+    border: 2px solid #ff8080;
+}
 
 

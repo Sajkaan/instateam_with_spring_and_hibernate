@@ -11,6 +11,7 @@
                     <div class="editRoles">
                         <input type="text" th:field="*{roleName}" placeholder="${roleName}"/>
                         <button type="submit" class="button">Edit</button>
+                        <a th:href="${delete}" class="button delete">Delete</a>
                         <a th:href="@{/roles}" class="button button-secondary">Cancel</a>
                     </div>
                 </form>
