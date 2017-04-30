@@ -7,10 +7,10 @@
 <section>
     <div class="container wrapper">
         <form method="post" th:action="${action}" th:object="${collaborator}">
-            <h2>Edit Role</h2>
+            <h2>Edit Collaborator</h2>
             <div class="editRoles">
-                <input type="text" th:field="*{name}" placeholder="${collaborator.name}"/>
-                <select th:field="*{role}">
+                <input type="text" th:field="*{name}"/>
+                <select class="select_detail" th:field="*{role}">
                     <option th:each="role : ${roles}" th:value="${role.id}"
                             th:text="${role.roleName}">
                     </option>
