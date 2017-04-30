@@ -11,7 +11,10 @@
                     <h2 style="display:inline">Manage Collaborators</h2>
                     <ul class="checkbox-list roles-collaborators">
                         <li th:each="colab: ${collaborators}">
-                            <span class="primary" th:text="${colab.name}">Michael Pemulius</span>
+                            <a class="primary"
+                               th:href="@{'/collaborators/' + ${colab.id} + '/edit'}"
+                               th:text="${colab.name}">Michael Pemulius</a>
+                            <div th:text="${colab.role.roleName}"></div>
                         </li>
                     </ul>
                     <div class="actions add-new-collaborator">
@@ -19,7 +22,7 @@
                         <input type="hidden" th:field="*{id}"/>
                         <div class="custom-select">
                             <span class="dropdown-arrow"></span>
-                            <select th:field="*{role.id}">
+                            <select th:field="*{role}">
                                 <option th:each="role : ${roles}" th:value="${role.id}"
                                         th:text="${role.roleName}">
                                 </option>

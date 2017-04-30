@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('collaborator')"></head>
+<body>
+<div th:replace="layout :: header"></div>
+<div th:replace="layout :: nav"></div>
+<section>
+    <div class="container wrapper">
+        <form method="post" th:action="${action}" th:object="${collaborator}">
+            <h2>Edit Role</h2>
+            <div class="editRoles">
+                <input type="text" th:field="*{name}" placeholder="${collaborator.name}"/>
+                <select th:field="*{role}">
+                    <option th:each="role : ${roles}" th:value="${role.id}"
+                            th:text="${role.roleName}">
+                    </option>
+                </select>
+                <button type="submit" class="button">Edit</button>
+                <a th:href="${delete}" class="button delete">Delete</a>
+                <a th:href="@{/collaborators}" class="button button-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

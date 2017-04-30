@@ -73,6 +73,26 @@ public class CollaboratorController {
         return "redirect:/collaborators";
     }
 
+    @RequestMapping("/collaborators/{id}/edit")
+    public String editCollaborator(@PathVariable Long id,Model model) {
+        model.addAttribute("collaborator",collaboratorService.findById(id));
+        model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("action", String.format("/collaborators/%s/edit", id));
+
+        return "collaborator/detail";
+    }
+
+    @RequestMapping(value = "/collaborators/{id}/edit", method = RequestMethod.POST)
+    public String changeCollaborator(@Valid Collaborator collaborator, BindingResult result) {
+        if (result.hasErrors()) {
+            return "redirect:/collaborators";
+        }
+
+        collaboratorService.save(collaborator);
+
+        return "redirect:/collaborators";
+    }
+
 
 
 }

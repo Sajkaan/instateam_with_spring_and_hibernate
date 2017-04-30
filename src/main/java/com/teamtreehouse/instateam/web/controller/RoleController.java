@@ -28,7 +28,7 @@ public class RoleController {
     private CollaboratorService collaboratorService;
 
     @RequestMapping("/roles")
-    public String listRoles (Model model) {
+    public String listRoles(Model model) {
 
         List<Role> roleList = roleService.findAll();
 
@@ -53,17 +53,18 @@ public class RoleController {
     }
 
     @RequestMapping("/roles/{id}/edit")
-    public String editRole(@PathVariable Long id, Model model){
+    public String editRole(@PathVariable Long id, Model model) {
 
-        model.addAttribute("role",roleService.findById(id));
+        model.addAttribute("role", roleService.findById(id));
         model.addAttribute("action", String.format("/roles/%s/edit", id));
         model.addAttribute("delete", String.format("/roles/%s/delete", id));
+
         return "role/detail";
     }
 
     @RequestMapping(value = "/roles/{id}/edit", method = RequestMethod.POST)
     public String changeRole(@Valid Role role, BindingResult result) {
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             return "redirect:/roles";
         }
 
