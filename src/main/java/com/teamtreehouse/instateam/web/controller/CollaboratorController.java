@@ -33,9 +33,7 @@ public class CollaboratorController {
     public String collaborators(Model model) {
 
         model.addAttribute("collaborators", collaboratorService.findAll());
-        model.addAttribute("project", null);
         model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("role", new Role());
         model.addAttribute("action", "/collaborators");
         model.addAttribute("collaborator", new Collaborator());
 

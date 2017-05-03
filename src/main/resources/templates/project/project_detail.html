@@ -14,11 +14,11 @@
                     </div>
                     <div class="roles-collaborators">
                         <h3>Roles &amp; Collaborators</h3>
-                        <div class="list-item" th:each="collab : ${project.collaborators}">
+                        <div class="list-item" th:each="entry : ${rolesAssignment}">
                             <span class="primary"
-                                  th:if="${collab != null}"
+                                  th:text="${entry.key.roleName}"
                                   >Developer</span>
-                            <span class="secondary" th:text="${collab.name}">Michael Pemulis</span>
+                            <span class="secondary" th:text="${entry.value.name}">Michael Pemulis</span>
                         </div>
                     </div>
                     <div class="actions">

@@ -19,10 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ProjectController {
@@ -84,10 +81,10 @@ public class ProjectController {
     public String projectDetails(@PathVariable Long id, Model model) {
 
         Project project = projectService.findById(id);
-        List<Collaborator> collaboratorList = project.getCollaborators();
-        List<Role> roles = project.getRolesNeeded();
+        Map<Role, Collaborator> rolesAssignment = getRoleCollaboratorMap(project);
+
         model.addAttribute("project", project);
-        model.addAttribute("collaborators", collaboratorList);
+        model.addAttribute("rolesAssignment", rolesAssignment);
 
         return "project/project_detail";
     }
@@ -126,10 +123,8 @@ public class ProjectController {
     public String editCollaborators(Model model,@PathVariable Long id) {
 
         Project project = projectService.findById(id);
-        List<Collaborator> collaborators = collaboratorService.findAll();
 
         model.addAttribute("project", project);
-        model.addAttribute("collaborators", collaborators);
         model.addAttribute("cancel", String.format("/projects/%s", id));
 
         return "project/project_collaborators";
@@ -146,6 +141,26 @@ public class ProjectController {
         projectService.save(projectForSaving);
 
         return String.format("redirect:/projects/{id}", project.getId());
+    }
+
+    public Map<Role, Collaborator> getRoleCollaboratorMap(Project project) {
+        List<Role> rolesNeeded = project.getRolesNeeded();
+        List<Collaborator> collaborators = project.getCollaborators();
+
+        Map<Role, Collaborator> roleCollaborator = new LinkedHashMap<>();
+
+        for (Role roleNeeded : rolesNeeded) {
+            roleCollaborator.put(roleNeeded,
+                    collaborators.stream()
+                    .filter(collaborator -> collaborator.getRole().getId().equals(roleNeeded.getId()))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        Collaborator unassigned = new Collaborator();
+                        unassigned.setName("Unassigned");
+                        return unassigned;
+                    }));
+        }
+        return roleCollaborator;
     }
 
 }

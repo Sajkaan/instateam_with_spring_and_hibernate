@@ -32,11 +32,17 @@ public class Project {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Collaborator> collaborators = new ArrayList<>();
 
-    @DateTimeFormat(pattern = "dd-M-yyyy hh:mm:ss")
+    @Column(updatable = false)
     private Date dateCreated;
 
 
     public Project() {}
+
+    public void removeCollaborator(Collaborator collaborator) {
+        collaborators.remove(collaborator);
+    }
+
+
 
     public Long getId() {
         return id;

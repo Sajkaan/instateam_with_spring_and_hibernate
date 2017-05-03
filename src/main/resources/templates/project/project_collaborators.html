@@ -8,14 +8,14 @@
         <section>
             <div class="container wrapper">
                 <form method="post" th:action="${action}" th:object="${project}" >
-                    <label>Edit Collaborators: Website Project</label>
+                    <label th:text="'Edit ' + ${project.projectName}">Edit Collaborators: Website Project</label>
                     <ul class="checkbox-list">
-                        <li th:each="role : ${project.rolesNeeded}">
+                        <li th:each="role : *{rolesNeeded}">
                             <span class="primary"  th:text="${role.roleName}">Developer</span>
                             <div class="custom-select" >
                                 <span class="dropdown-arrow"></span>
                                 <select th:field="*{collaborators}">
-                                    <option th:each="collab : ${collaborators}"
+                                    <option th:each="collab : ${role.collaborators}"
                                             th:text="${collab.name}"
                                             th:value="${collab.id}">Michael Pemulis</option>
                                 </select>
