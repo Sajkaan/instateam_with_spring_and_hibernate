@@ -27,6 +27,7 @@ public class RoleController {
     @Autowired
     private CollaboratorService collaboratorService;
 
+    // Role page
     @RequestMapping("/roles")
     public String listRoles(Model model) {
 
@@ -41,6 +42,7 @@ public class RoleController {
         return "role/roles";
     }
 
+    // Add Role
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
     public String addRole(@Valid Role role, BindingResult result) {
         if (result.hasErrors()) {
@@ -52,6 +54,7 @@ public class RoleController {
         return "redirect:/roles";
     }
 
+    // Select Role for edit
     @RequestMapping("/roles/{id}/edit")
     public String editRole(@PathVariable Long id, Model model) {
 
@@ -62,6 +65,7 @@ public class RoleController {
         return "role/detail";
     }
 
+    // Edit Role
     @RequestMapping(value = "/roles/{id}/edit", method = RequestMethod.POST)
     public String changeRole(@Valid Role role, BindingResult result) {
         if (result.hasErrors()) {
@@ -73,13 +77,12 @@ public class RoleController {
         return "redirect:/roles";
     }
 
+    // Delete Role
     @RequestMapping(value = "/roles/{id}/delete")
     public String deleteRole(@PathVariable Long id) {
         Role role = roleService.findById(id);
 
-        // TODO: SG Must set collaborators with specific role to null or delete them too
-
-        roleService.delete(role);
+        // TODO: SG Add delete
 
         return "redirect:/roles";
     }

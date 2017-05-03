@@ -1,7 +1,5 @@
 package com.teamtreehouse.instateam.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,12 +34,12 @@ public class Project {
     private Date dateCreated;
 
 
-    public Project() {}
+    public Project() {
+    }
 
     public void removeCollaborator(Collaborator collaborator) {
         collaborators.remove(collaborator);
     }
-
 
 
     public Long getId() {

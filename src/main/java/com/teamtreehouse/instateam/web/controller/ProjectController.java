@@ -6,7 +6,6 @@ import com.teamtreehouse.instateam.model.Role;
 import com.teamtreehouse.instateam.service.CollaboratorService;
 import com.teamtreehouse.instateam.service.ProjectService;
 import com.teamtreehouse.instateam.service.RoleService;
-import groovy.util.IFileNameFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +13,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.Instant;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProjectController {
@@ -44,7 +45,7 @@ public class ProjectController {
         return "index";
     }
 
-    // Adding a new project
+    // New project
     @RequestMapping("/new_project")
     public String newProject(Model model) {
 
@@ -59,10 +60,10 @@ public class ProjectController {
         return "project/edit_project";
     }
 
-    // Adding a new project post method
+    // Add a new project post method
     @RequestMapping(value = "/new_project", method = RequestMethod.POST)
     public String saveProject(@Valid Project project,
-                              BindingResult result, RedirectAttributes redirectAttributes){
+                              BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
@@ -89,12 +90,12 @@ public class ProjectController {
         return "project/project_detail";
     }
 
-    // Edit specific project
+    // Selected project
     @RequestMapping("/projects/{id}/editProject")
-    public String editProject(@PathVariable Long id, Model model) {
+    public String selectedProject(@PathVariable Long id, Model model) {
 
         if (!model.containsAttribute("project")) {
-            model.addAttribute("project", projectService.findById(id) );
+            model.addAttribute("project", projectService.findById(id));
         }
 
         model.addAttribute("roles", roleService.findAll());
@@ -105,10 +106,10 @@ public class ProjectController {
         return "project/edit_project";
     }
 
-    // Edit specific project POST method
+    // Edit project
     @RequestMapping(value = "/projects/{id}", method = RequestMethod.POST)
-    public String editProjectPost(@Valid Project project,
-                                  @PathVariable Long id, BindingResult result ){
+    public String editProject(@Valid Project project,
+                                  @PathVariable Long id, BindingResult result) {
 
         if (result.hasErrors()) {
             return String.format("redirect:/projects/%s", id);
@@ -119,8 +120,9 @@ public class ProjectController {
         return "redirect:/projects/{id}";
     }
 
+    // Edit Collaborators
     @RequestMapping("/projects/{id}/editCollaborators")
-    public String editCollaborators(Model model,@PathVariable Long id) {
+    public String editCollaborators(Model model, @PathVariable Long id) {
 
         Project project = projectService.findById(id);
 
@@ -130,9 +132,10 @@ public class ProjectController {
         return "project/project_collaborators";
     }
 
+    // Assign Collaborators
     @RequestMapping(value = "/projects/{id}/editCollaborators", method = RequestMethod.POST)
-    public String assignCollaborators(@PathVariable Long id,Project project,
-                                        BindingResult result) {
+    public String assignCollaborators(@PathVariable Long id, Project project,
+                                      BindingResult result) {
 
         Project projectForSaving = projectService.findById(id);
 
@@ -152,13 +155,13 @@ public class ProjectController {
         for (Role roleNeeded : rolesNeeded) {
             roleCollaborator.put(roleNeeded,
                     collaborators.stream()
-                    .filter(collaborator -> collaborator.getRole().getId().equals(roleNeeded.getId()))
-                    .findFirst()
-                    .orElseGet(() -> {
-                        Collaborator unassigned = new Collaborator();
-                        unassigned.setName("Unassigned");
-                        return unassigned;
-                    }));
+                            .filter(collaborator -> collaborator.getRole().getId().equals(roleNeeded.getId()))
+                            .findFirst()
+                            .orElseGet(() -> {
+                                Collaborator unassigned = new Collaborator();
+                                unassigned.setName("Unassigned");
+                                return unassigned;
+                            }));
         }
         return roleCollaborator;
     }
