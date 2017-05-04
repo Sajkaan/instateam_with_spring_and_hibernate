@@ -6,6 +6,7 @@ import com.teamtreehouse.instateam.model.Role;
 import com.teamtreehouse.instateam.service.CollaboratorService;
 import com.teamtreehouse.instateam.service.ProjectService;
 import com.teamtreehouse.instateam.service.RoleService;
+import com.teamtreehouse.instateam.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,12 +68,14 @@ public class ProjectController {
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
-            redirectAttributes.addFlashAttribute("project", project);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Fill out the necessary fields.", FlashMessage.Status.FAILURE));
             return "redirect:/new_project";
         }
 
         project.setDateCreated(Date.from(Instant.now()));
         projectService.save(project);
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Successfully created new project", FlashMessage.Status.SUCCESS));
 
         return "redirect:/";
     }
@@ -109,13 +112,15 @@ public class ProjectController {
     // Edit project
     @RequestMapping(value = "/projects/{id}", method = RequestMethod.POST)
     public String editProject(@Valid Project project,
-                                  @PathVariable Long id, BindingResult result) {
+                                  @PathVariable Long id, BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Please provide the right information", FlashMessage.Status.FAILURE));
             return String.format("redirect:/projects/%s", id);
         }
 
         projectService.save(project);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Project successfully updated.", FlashMessage.Status.SUCCESS));
 
         return "redirect:/projects/{id}";
     }
@@ -135,14 +140,18 @@ public class ProjectController {
     // Assign Collaborators
     @RequestMapping(value = "/projects/{id}/editCollaborators", method = RequestMethod.POST)
     public String assignCollaborators(@PathVariable Long id, Project project,
-                                      BindingResult result) {
+                                      BindingResult result, RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("Please insert proper name. For collaborator.");
+            return String.format("/projects/%s/editCollaborators", id);
+        }
 
         Project projectForSaving = projectService.findById(id);
-
         projectForSaving.setCollaborators(project.getCollaborators());
 
         projectService.save(projectForSaving);
-
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Collaborators successfully assigned.", FlashMessage.Status.SUCCESS));
         return String.format("redirect:/projects/{id}", project.getId());
     }
 

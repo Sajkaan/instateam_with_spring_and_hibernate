@@ -5,6 +5,7 @@ import com.teamtreehouse.instateam.model.Role;
 import com.teamtreehouse.instateam.service.CollaboratorService;
 import com.teamtreehouse.instateam.service.ProjectService;
 import com.teamtreehouse.instateam.service.RoleService;
+import com.teamtreehouse.instateam.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -41,15 +43,16 @@ public class CollaboratorController {
 
     // Add Collaborator
     @RequestMapping(value = "/collaborators", method = RequestMethod.POST)
-    public String addCollaborator(@Valid Collaborator collaborator, BindingResult result) {
-        if (result.hasErrors()) {
+    public String addCollaborator(@Valid Collaborator collaborator, BindingResult result,RedirectAttributes redirectAttributes) {
 
-            // TODO : SG ADD FLASH MESSAGE
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid input", FlashMessage.Status.FAILURE));
             return "redirect:/collaborators";
         }
         Role role = roleService.findById(collaborator.getRole().getId());
         collaborator.setRole(role);
         collaboratorService.save(collaborator);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Collaborator added.", FlashMessage.Status.SUCCESS));
 
         return "redirect:/collaborators";
     }
@@ -66,12 +69,15 @@ public class CollaboratorController {
 
     // Edit Collaborator
     @RequestMapping(value = "/collaborators/{id}/edit", method = RequestMethod.POST)
-    public String editCollaborator(@Valid Collaborator collaborator, BindingResult result) {
+    public String editCollaborator(@Valid Collaborator collaborator, BindingResult result, RedirectAttributes redirectAttributes) {
+
         if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid input", FlashMessage.Status.FAILURE));
             return "redirect:/collaborators";
         }
 
         collaboratorService.save(collaborator);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Successfully updated collaborator", FlashMessage.Status.SUCCESS));
 
         return "redirect:/collaborators";
     }

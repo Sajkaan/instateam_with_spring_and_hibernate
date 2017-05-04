@@ -41,7 +41,6 @@ public class Project {
         collaborators.remove(collaborator);
     }
 
-
     public Long getId() {
         return id;
     }

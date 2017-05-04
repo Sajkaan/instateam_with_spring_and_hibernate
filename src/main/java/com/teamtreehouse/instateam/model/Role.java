@@ -13,7 +13,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Enter the name of the role you want to add")
+    @NotNull
     @Size(min = 3, max = 20)
     private String roleName;
 
